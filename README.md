@@ -31,12 +31,13 @@ In this project, we used two software pakcage for building PRS. First one is [PR
 According to (PRSice user manual)[http://prsice.info/PRSice_MANUAL_v1.25.pdf], the basic command to run PRSice require a GWAS statistics as a base data input and a raw genotype data of ‘target phenotype’ as a target data input. 
 ```text
 module load gcc
-# If your target data input is a vcf file, you need to use plink2 to convert into
+# If your target data input is a vcf file, you need to use plink2 to convert into 
 # bed file with bim and fam file.
 # Note: --const-fid flag is for not changing name when converting format. --make-bed
 # flag is for creating fam file and bim file.
 plink2 --vcf target_target_file.vcf --out target_target_file --make-bed --const-fid
-# 
+# download PRSice
+Rscript PRSice.R -b  /home/yinyin/GWAS/daner_pgc_asd_euro_all_25Mar2015 -t\/hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/external_data/2018_05_01/mssngpseudo.all.masked_Feb_28_new \--prsice /home/yinyin/PRSice/PRSice --extract PRSice.valid 
 ```
 ##### 2.2.2 Prepare ldpred
 
