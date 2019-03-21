@@ -15,17 +15,22 @@ This package describes the workflow to utilize GWAS data from MSSNG to build pol
 4. You are good to download data
 ```text
 # brief view of ASD GWAS statistics
-
 ```
-
+![alt text](https://github.com/Yin1012/PRSpipeline.ASD/blob/master/asd.PNG)
+```text
+# brief view of SCZ GWAS statistics
+```
+![alt text](https://github.com/Yin1012/PRSpipeline.ASD/blob/master/scz.PNG)
 ##### 2.1.2 Download GWAS statistics of EA
 ```text
 wget http://ssgac.org/documents/GWAS_EA.to10K.txt
 ```
 #### 2.2 Download programs for building PRS 
-##### 2.2.1 PRSice
-#### 2.3 Download ldpred
-#### Prepare required files and format
+In this project, we used two software pakcage for building PRS. First one is [PRSice](http://prsice.info/) which is a software package for calculating, applying, evaluating and plotting the results of polygenic risk scores. The second one is (ldpred)[https://github.com/bvilhjal/ldpred] which can be downloaded from github.
+##### 2.2.1 Prepare PRSice
+
+##### 2.2.2 Prepare ldpred
+
 
 ### Acknowlegement 
 ### Citation
