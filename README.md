@@ -28,7 +28,16 @@ wget http://ssgac.org/documents/GWAS_EA.to10K.txt
 #### 2.2 Download programs for building PRS 
 In this project, we used two software pakcage for building PRS. First one is [PRSice](http://prsice.info/) which is a software package for calculating, applying, evaluating and plotting the results of polygenic risk scores. The second one is (ldpred)[https://github.com/bvilhjal/ldpred] which can be downloaded from github.
 ##### 2.2.1 Prepare PRSice
-
+According to (PRSice user manual)[http://prsice.info/PRSice_MANUAL_v1.25.pdf], the basic command to run PRSice require a GWAS statistics as a base data input and a raw genotype data of ‘target phenotype’ as a target data input. 
+```text
+module load gcc
+# If your target data input is a vcf file, you need to use plink2 to convert into
+# bed file with bim and fam file.
+# Note: --const-fid flag is for not changing name when converting format. --make-bed
+# flag is for creating fam file and bim file.
+plink2 --vcf target_target_file.vcf --out target_target_file --make-bed --const-fid
+# 
+```
 ##### 2.2.2 Prepare ldpred
 
 
