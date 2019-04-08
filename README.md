@@ -27,7 +27,7 @@ wget http://ssgac.org/documents/GWAS_EA.to10K.txt
 ![alt text](https://github.com/Yin1012/PRSpipeline.ASD/blob/master/ea.PNG)
 ### 2.2 Download programs for building PRS 
 In this project, we used two software pakcage for building PRS. First one is [PRSice](http://prsice.info/) which is a software package for calculating, applying, evaluating and plotting the results of polygenic risk scores. The second one is (ldpred)[https://github.com/bvilhjal/ldpred] which can be downloaded from github.
-## 3. Building PRS and statistical analysis
+### 2.3 Building PRS and statistical analysis
 ASDpipline_script in this package include:
 1. Combine GWASs and making up missing columns
 2. Run PRSice and LDpred to build 55 PRS by using different GWAS combinations, different parameters and different software.
