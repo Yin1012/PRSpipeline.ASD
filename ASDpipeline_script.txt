@@ -1,0 +1,332 @@
+#!/bin/bash
+
+## Preparation for mtag
+### Check the format and make up missing column
+module load R
+R
+#### ASD GWAS
+library('data.table')
+Asd_gwas <- fread(<file path>, data.table =FALSE)
+z <- (log2(asd_gwas$OR))/asd_gwas$SE
+New_asd_gwas <- cbind(asd_gwas, z)
+41801
+New_asd_gwas$n <- rep(41801, nrow(New_asd_gwas))
+colnames(New_asd_gwas) <- c("chr", "snpid", "bps","a1", "a2", "INFO","OR", "SE", "pval", "z", "n")
+fwrite(New_asd_gwas, file = <file path>, row.names =FALSE, col.names = TRUE, sep = "\t", quote = FALSE)
+#### SCZ GWAS
+scz <- fread(<file path>, data.table =FALSE)
+intersect <- intersect(scz$snpid, freq$ID)
+scz_intersect <- scz[!is.na(match(scz[1: nrow(scz), "snpid"], intersect)),]
+freq_gwas_at_intersect_sites <- freq[!is.na(match(freq[, "ID"],intersect)), ]
+sort_freq <- freq_gwas_at_intersect_sites[order(match(freq_gwas_at_intersect_sites$ID, scz_intersect$snpid)),]
+New_scz_gwas <- cbind(scz_intersect, sort_freq$ALT_FREQS)
+colnames(New_scz_gwas ) <- c("chr", "snpid","a1", "a2", “bpos”, "info","or", "se", "pval", "z", "n")
+New_scz_gwas$n <- rep(150064, nrow(New_scz_gwas))
+z <- (log2(New_scz_gwas$or))/New_scz_gwas$se
+fwrite(New_scz_gwas, file = <file path>, row.names =FALSE, col.names = TRUE, sep = "\t", quote = FALSE)
+#### EA GWAS
+ea <- fread(<file path>, data.table =FALSE)
+ea$n <- rep(766345, nrow(ea))
+z <- ea$Beta/ea$SE
+new_ea <- cbind(ea, z)
+colnames(new_ea) <- c("chr", "snpid", "bps","a1", "a2", "INFO","OR", "SE", "pval", "z", "n")
+fwrite(new_ea, file = <file path>, row.names =FALSE, col.names = TRUE, sep = "\t", quote = FALSE)
+q()
+### Environment 
+PATH=${PATH}:/home/yinyin/miniconda3/bin 
+module load python 
+source activate python2
+cd /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/mtag
+
+## Combine GWAS
+
+python2 mtag.py --sumstats < ASD GWAS file path>,< SCZ GWAS file path> --out <output file path> --stream_stdout --n_min 0.0 
+python2 mtag.py --sumstats < ASD GWAS file path>,< EA GWAS file path> --out <output file path> --stream_stdout --n_min 0.0 
+python2 mtag.py --sumstats < ASD GWAS file path>,< SCZ GWAS file path>, < EA GWAS file path> --out <output file path> --stream_stdout --n_min 0.0 
+
+## Preparation for PRSice
+
+module load R/3.0.3
+module load gcc
+
+## Built PRS by using PRSice
+
+### r2 < 0.2 bar-levels = 0.00000005,0.0005,0.01,0.05,0.1,1  ASD
+Rscript PRSice.R -b  /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/new_GWAS/iPSYCH-PGC_ASD_Nov2017 -t /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/external_data/2018_05_01/mssngpseudo.all.masked_Feb_28_new --prsice /home/yinyin/PRSice/PRSice --extract PRSice.valid --clump-r2 0.2 --bar-levels 0.00000005,0.0005,0.01,0.05,0.1,1 --fastscore --out ASD_r2_0.2_bar_fast_Apr_3 --all-score
+### r2 < 0.8 bar-levels = 0.00000005,0.0005,0.01,0.05,0.1,1 ASD
+Rscript PRSice.R -b  /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/new_GWAS/iPSYCH-PGC_ASD_Nov2017 -t /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/external_data/2018_05_01/mssngpseudo.all.masked_Feb_28_new --prsice /home/yinyin/PRSice/PRSice --extract PRSice.valid --clump-r2 0.8  --out r2_0.8_bar_fast --bar-levels 0.00000005,0.0005,0.01,0.05,0.1,1 --fastscore --out ASD_r2_0.8_bar_fast_Apr_3 --all-score
+### r2 < 0.2 bar-levels = 0.00000005,0.0005,0.01,0.05,0.1,1 ASD+EA
+Rscript PRSice.R -b  /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/new_GWAS/combine_ASD_EA_edited_Apr_1_trait_1.txt -t /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/external_data/2018_05_01/mssngpseudo.all.masked_Feb_28_new --prsice /home/yinyin/PRSice/PRSice --extract PRSice.valid --clump-r2 0.2 --bar-levels 0.00000005,0.0005,0.01,0.05,0.1,1 --fastscore --out ASD_EA_r2_0.2_bar_fast_Apr_3 --all-score
+### r2 < 0.8 bar-levels = 0.00000005,0.0005,0.01,0.05,0.1,1 ASD+EA
+Rscript PRSice.R -b  /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/new_GWAS/combine_ASD_EA_edited_Apr_1_trait_1.txt -t /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/external_data/2018_05_01/mssngpseudo.all.masked_Feb_28_new --prsice /home/yinyin/PRSice/PRSice --extract PRSice.valid --clump-r2 0.8 --bar-levels 0.00000005,0.0005,0.01,0.05,0.1,1 --fastscore --out ASD_EA_r2_0.8_bar_fast_Apr_3 --all-score
+### r2 < 0.2 bar-levels = 0.00000005,0.0005,0.01,0.05,0.1,1 ASD+SCZ
+Rscript PRSice.R -b  /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/new_GWAS/combine_ASD_SCZ_edited_Apr_1_trait_1.txt -t /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/external_data/2018_05_01/mssngpseudo.all.masked_Feb_28_new --prsice /home/yinyin/PRSice/PRSice --extract PRSice.valid --clump-r2 0.2 --bar-levels 0.00000005,0.0005,0.01,0.05,0.1,1 --fastscore --out ASD_SCZ_r2_0.2_bar_fast_Apr_3 --all-score
+### r2 < 0.8 bar-levels = 0.00000005,0.0005,0.01,0.05,0.1,1 ASD+SCZ
+Rscript PRSice.R -b  /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/new_GWAS/combine_ASD_SCZ_edited_Apr_1_trait_1.txt -t /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/external_data/2018_05_01/mssngpseudo.all.masked_Feb_28_new --prsice /home/yinyin/PRSice/PRSice --extract PRSice.valid --clump-r2 0.8 --bar-levels 0.00000005,0.0005,0.01,0.05,0.1,1 --fastscore --out ASD_SCZ_r2_0.8_bar_fast_Apr_3 --all-score
+### r2 < 0.2 bar-levels = 0.00000005,0.0005,0.01,0.05,0.1,1 ASD+SCZ+EA
+Rscript PRSice.R -b  /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/new_GWAS/combine_ASD_SCZ_EA_edited_Apr_1_trait_1.txt -t /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/external_data/2018_05_01/mssngpseudo.all.masked_Feb_28_new --prsice /home/yinyin/PRSice/PRSice --extract PRSice.valid --clump-r2 0.2 --bar-levels 0.00000005,0.0005,0.01,0.05,0.1,1 --fastscore --out ASD_SCZ_EA_r2_0.2_bar_fast_Apr_3 --all-score
+### r2 < 0.8 bar-levels = 0.00000005,0.0005,0.01,0.05,0.1,1 ASD+SCZ+EA
+Rscript PRSice.R -b  /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/new_GWAS/combine_ASD_SCZ_EA_edited_Apr_1_trait_1.txt -t /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/external_data/2018_05_01/mssngpseudo.all.masked_Feb_28_new --prsice /home/yinyin/PRSice/PRSice --extract PRSice.valid --clump-r2 0.8 --bar-levels 0.00000005,0.0005,0.01,0.05,0.1,1 --fastscore --out ASD_SCZ_EA_r2_0.8_bar_fast_Apr_3 --all-score
+
+## PCA
+$(PLINK) \
+--bfile ${MSSNG} \
+--indep-pairwise 250kb 1 0.1 \ ## 
+--out prune_output
+
+$(PLINK) \
+--extract prune_output.prune.in \
+--bfile ${MSSNG} \
+--out OUTPUT_FILE \
+--pca header
+
+## Preparation for LDpred
+PATH=${PATH}:/home/yinyin/miniconda3/bin 
+module load python 
+source activate python2
+
+## Built PRS by using LDpred
+./LDpred.py coord --gf /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/ref --ssf /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/scratch2/asd_gwas_at_intersect_sites.txt  --out /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/scratch/Ldpred_Apr_4.out --N 10610 --rs SNP --pos BP --pval P --beta --ncol ngt --vbim /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/external_data/2018_05_01/mssngpseudo.all.masked_Feb_28_new.bim
+./LDpred.py gibbs --cf /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/scratch/Ldpred_Mar_28.out --ldr 3142 --out /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/scratch/ldpred_gibbs_Mar_28 --ldf LD_Mar_28 --ldr 3142 --N 10610
+./LDpred.py score --gf /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/external_data/2018_05_01/mssngpseudo.all.masked_Feb_28_new --rf /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/scratch3/Ldpred_Mar_28.out_gibbs --out LDpred_Apr_3  --rf-format LDPRED --pf-format FAM &>  /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/scratch3/ldpred_output.txt
+
+## Statistical Analysis
+R
+library(pROC)
+library(DescTools)
+
+## load pseudo data
+source("~/ASDpipeline/pseudor2.R")
+
+## load in pheno.RData
+load("~/ASDpipeline/2018_04_05/pheno.RData")
+
+## load pca result
+pca_result <- read.table("C:/Users/Owner/Documents/ASDpipeline/PCA_output_Apr_4.eigenvec", header = TRUE)
+pc1 <- pca_result$PC1
+pc2 <- pca_result$PC2  
+
+get_platform <- function(pca_result) {
+  ## load ASD result
+  platform <- array(NA, nrow(pca_result))
+  names(platform) <- pca_result[, "IID"]
+  t1 <- match(names(platform), pheno[, "INDEXID"])
+  platform[!is.na(t1)] <-as.character(pheno[t1[!is.na(t1)], "PLATFORM"])
+  t1 <- match(names(platform), paste0(pheno[, "INDEXID"], "A"))
+  platform[!is.na(t1)] <- as.character(pheno[t1[!is.na(t1)], "PLATFORM"])
+  ##
+  trio_matches <- grep("FAM", names(platform))
+  fam <- sapply(strsplit(names(platform)[trio_matches], "_"), function(x) paste0(x[1:2], collapse = "_"))
+  platform[trio_matches] <- as.character(pheno[match(fam, pheno[, "FAMILYID"]), "PLATFORM"])
+  return(platform)
+}
+
+## colouring on ASD status
+plot(pc1, pc2, col = c("red", "blue")[as.integer(asd) + 1])
+legend("topright", c("ASD", "control"), col = c("blue", "red"), lwd = 2)
+## colour on pseudocase/control 
+from_trio <- array(FALSE, length(asd))
+from_trio[grep("case", names(asd))] <- TRUE
+from_trio[grep("pseudocontrol", names(asd))] <- TRUE
+plot(pc1, pc2, col = c("red", "blue")[as.integer(from_trio) + 1])
+legend("topright", c("Trio", "Not trio"), col = c("blue", "red"), lwd = 2)
+## Colour on illumina/CG
+platform <- get_platform(pca_result)
+platform_options <- unique(platform)
+plot(pc1, pc2, col = c("red", "blue", "orange")[match(platform, platform_options)])
+legend("topright", platform_options, col = c("red", "blue", "orange"), lwd = 2)
+
+
+
+
+## load PRS result
+get_prsice_prs <- function(r2_threshold, pvalue_threshold, GWAS) {
+    file_name <- paste0("C:/Users/Owner/Documents/ASDpipeline/", GWAS, "_r2_", r2_threshold, "_bar_fast_Apr_3.all.score")
+    if (file.exists(file_name)){
+    prise_result <- read.table(paste0("C:/Users/Owner/Documents/ASDpipeline/", GWAS, "_r2_", r2_threshold, "_bar_fast_Apr_3.all.score"), header=TRUE)
+    prs <- prise_result[, paste0("X", pvalue_threshold)]
+    names(prs) <- prise_result[, "IID"]
+    return(prs)
+    } else {
+      return (NULL)
+    }
+}
+
+get_ldpred_prs <- function(rho_parameter) {
+  file_name <- paste0("C:/Users/Owner/Documents/ASDpipeline/LDpred_Apr_5_LDpred_p", rho_parameter, ".txt")
+  if (file.exists(file_name)){
+    ldpred_result <- read.table(file_name, header=TRUE, sep=",")
+    prs <- ldpred_result[, "PRS"]
+    names(prs) <- ldpred_result[, "IID"]
+    return(prs)
+  } else {
+    return (NULL)
+  }
+}
+get_asd <- function(prs) {
+  ## load ASD result
+  asd <- array(NA)
+  t1 <- match(names(prs), pheno[, "INDEXID"])
+  asd[!is.na(t1)] <- pheno[t1[!is.na(t1)], "AFFECTION"]
+  t1 <- match(names(prs), paste0(pheno[, "INDEXID"], "A"))
+  asd[!is.na(t1)] <- pheno[t1[!is.na(t1)], "AFFECTION"]
+  ##
+  asd[grep("case", names(prs))] <- 2
+  asd[grep("control", names(prs))] <- 1
+  asd <- asd - 1
+  names(asd) <- names(prs)
+  return(asd)
+}
+
+
+
+calculate_stats <- function(prs, asd) {
+    mydata <- data.frame(asd = asd, prs = prs, pc1 = pc1, pc2 = pc2  )
+    ##
+    ## generate probabilities
+    mylogit_prs_only <- glm(formula = asd ~ prs, data = mydata, family = "binomial")
+    mylogit_covars_only <- glm(formula = asd ~ pc1 + pc2, data = mydata, family = "binomial")
+    mylogit_full <- glm(formula = asd ~ prs + pc1 + pc2, data = mydata, family = "binomial")
+    ##    
+    mydata$prob_prs_only <- predict(mylogit_prs_only, type = c("response"))
+    mydata$prob_covars_only <- predict(mylogit_covars_only, type = c("response"))
+    mydata$prob_full <- predict(mylogit_full, type = c("response"))
+    ## get roc curves, pAUC value
+    g_prs_only <- roc(asd ~ prob_prs_only, data = mydata)
+    g_covars_only <- roc(asd ~ prob_covars_only, data = mydata)
+    g_full <- roc(asd ~ prob_full, data = mydata)
+    ##
+    p_value_prs_only <- coefficients(summary(mylogit_prs_only))[2, 4]
+    p_value_full <- coefficients(summary(mylogit_full))[2, 4]
+    ##
+    auc_prs_only <- g_prs_only$auc
+    auc_full <- g_full$auc
+    ##
+    r2_difference <- as.numeric(as.character(PseudoR2(mylogit_full, mydata = mydata) - PseudoR2(mylogit_prs_only, mydata = mydata)))
+    ##
+    stats <- c(
+      p_value_prs_only = p_value_prs_only, 
+      auc_prs_only = auc_prs_only,
+      p_value_full = p_value_full, 
+      auc_full = auc_full, r2_difference = r2_difference
+    )
+    ##
+    return(stats)
+}
+
+## Create PRSice table
+PRSice_table_plot <- data.frame("", "", "",
+                                "", "","", "", "", stringsAsFactors = FALSE)
+PRSice_table <- array("", c(0,8))
+colnames(PRSice_table) <- c("GWAS", "p-value threshold",
+                            "r2 threshold", "p-value (PRSice result only)",
+                            "p-value (full)", "auc (PRSice result only)", "auc (full)", "r2 difference")
+colnames(PRSice_table_plot) <- c("GWAS", "p-value threshold",
+                                 "r2 threshold", "p-value (PRSice result only)",
+                                 "p-value (full)", "auc (PRSice result only)", "auc (full)", "r2 difference")
+list_GWAS <- c("ASD", "ASD_SCZ", "ASD_EA", "ASD_SCZ_EA")
+list_level <- c("5e.08", "0.0005", "0.01", "0.05", "0.1", "1")
+list_r2 <- c(0.2, 0.8)
+for (GWAS in list_GWAS){
+     for (level in list_level){
+         for (r2 in list_r2){
+     prs <- get_prsice_prs(r2, level, GWAS)
+     if (!is.null(prs)){
+       asd <- get_asd(prs)
+       stat <- calculate_stats(prs, asd)
+      PRSice_table <- rbind(
+       PRSice_table, 
+       c(GWAS, level, r2, 
+         format(stat[1], format="e", digits = 1), 
+         round(stat[2], 2), 
+         format(stat[3],format="e", digits=1),
+         round(stat[4],2),
+         round(stat[5], 2)
+       )
+    )
+      new_row <- data.frame(
+        GWAS, level, r2, 
+        stat[1], 
+        stat[2], 
+        stat[3],
+        stat[4],
+        stat[5],stringsAsFactors = FALSE
+      )
+      colnames(new_row) <- c("GWAS", "p-value threshold",
+                             "r2 threshold", "p-value (PRSice result only)",
+                             "p-value (full)", "auc (PRSice result only)", "auc (full)", "r2 difference")
+     PRSice_table_plot <- rbind(
+       PRSice_table_plot, new_row)
+     
+}}}}
+
+## Create LDpred table
+
+LDpred_table_plot <- data.frame("", "", "",
+                                "", "","", "", stringsAsFactors = FALSE)
+LDpred_table <- array("", c(0,7))
+colnames(LDpred_table) <- c("GWAS", "Rho paramter",
+                            "p-value (LDpred result only)",
+                            "p-value (full)", "auc (LDpred result only)", "auc (full)", "r2 difference")
+colnames(LDpred_table_plot) <- c("GWAS", "Rho paramter",
+                                 "p-value (LDpred result only)",
+                                 "p-value (full)", "auc (LDpred result only)", "auc (full)", "r2 difference")
+list_rho <- c("1.0000e+00", "1.0000e-01", "1.0000e-02", "1.0000e-03", "3.0000e-01", "3.0000e-02", "3.0000e-03")
+  for (rho in list_rho){
+      prs <- get_ldpred_prs(rho)
+      if (!is.null(prs)){
+        asd <- get_asd(prs)
+        stat <- calculate_stats(prs, asd)
+        LDpred_table <- rbind(
+          LDpred_table, 
+          c("ASD", rho, 
+            format(stat[1], format="e", digits = 1), 
+            round(stat[2], 2), 
+            format(stat[3],format="e", digits=1),
+            round(stat[4],2),
+            round(stat[5], 2)
+          )
+        )
+        new_row <- data.frame(
+          "ASD", rho, 
+          stat[1], 
+          stat[2], 
+          stat[3],
+          stat[4],
+          stat[5],stringsAsFactors = FALSE
+        )
+        colnames(new_row) <- c("GWAS", "Rho paramter",
+                               "p-value (LDpred result only)",
+                               "p-value (full)", "auc (LDpred result only)", "auc (full)", "r2 difference")
+        LDpred_table_plot <- rbind(
+          LDpred_table_plot, new_row)
+        
+      }}
+
+## plot AUC curve
+### best PRS was built by using PRSice, r2=0.8, p-value threshold = 1 and mutiple GWAS(ASD, EA, SCZ)
+
+prs <- get_prsice_prs(0.8, '1', "ASD_SCZ_EA")
+asd <- get_asd(prs)
+mydata <- data.frame(asd = asd, prs = prs, pc1 = pc1, pc2 = pc2  )
+mylogit_full <- glm(formula = asd ~ prs + pc1 + pc2, data = mydata, family = "binomial")
+mydata$prob_full <- predict(mylogit_full, type = c("response"))
+g_full <- roc(asd ~ prob_full, data = mydata)
+ggroc(g_full)
+
+
+## can plot as well, can do with top model
+par(mfrow = c(1, 3))
+plot(g_prs_only)
+plot(g_covars_only)
+plot(g_full)
+
+## what is most useful is to build a table with something like this
+c(
+  auc_prs_only = g_prs_only$auc,
+  auc_covars_only = g_covars_only$auc,
+  auc_full = g_full$auc,
+  p_prs_full = coefficients(summary(mylogit_full))["prs", "Pr(>|z|)", drop = FALSE]
+)
+
+# End
