@@ -27,48 +27,12 @@ wget http://ssgac.org/documents/GWAS_EA.to10K.txt
 ![alt text](https://github.com/Yin1012/PRSpipeline.ASD/blob/master/ea.PNG)
 #### 2.2 Download programs for building PRS 
 In this project, we used two software pakcage for building PRS. First one is [PRSice](http://prsice.info/) which is a software package for calculating, applying, evaluating and plotting the results of polygenic risk scores. The second one is (ldpred)[https://github.com/bvilhjal/ldpred] which can be downloaded from github.
-##### 2.2.1 Prepare PRSice
-According to (PRSice user manual)[http://prsice.info/PRSice_MANUAL_v1.25.pdf], the basic command to run PRSice require a GWAS statistics as a base data input and a raw genotype data of ‘target phenotype’ as a target data input. Here, we used the data from MSSNG as target data.
-```text
-module load gcc
-# If your target data input is a vcf file, you need to use plink2 to convert into 
-# bed file with bim and fam file.
-# Note: --const-fid flag is for not changing name when converting format. --make-bed
-# flag is for creating fam file and bim file.
-plink2 --vcf target_target_file.vcf --out target_target_file --make-bed --const-fid
-# download PRSice
-Wget http://prsice.info/PRSice_v1.25.zip
-unzip PRSice_v1.25.zip
-cd PRSice
-```
-Rscript PRSice.R -b  file_path_base_data -t file_path_target_data --prsice file_path_PRSice --extract PRSice.valid 
+#### 3. Building PRS and statistical analysis
+ASDpipline_script in this package include:
+1. Combine GWASs and making up missing columns
+2. Run PRSice and LDpred to build 55 PRS by using different GWAS combinations, different parameters and different software.
+3. Run PCA analyis and create related plots
+4. Create stastistic table for final results (p-value and AUC)
+### Acknowlegement.
+I am very thankful Dr. Robert William Davis. This project is supported by he Hospital for Sick Children (SickKids).
 
-##### 2.2.2 Prepare ldpred
-#### 3 Build PRS
-
-##### 3.1 Parameter choose
-1. (Basic) 
-```text
-./PRSice/PRSice \
-    --A1 A1 \
-    --A2 A2 \
-    --bar-levels 0.001,0.05,0.1,0.2,0.3,0.4,0.5,1 \
-    --base /home/yinyin/GWAS/daner_pgc_asd_euro_all_25Mar2015 \
-    --binary-target T \
-    --bp BP \
-    --chr CHR \
-    --clump-kb 250 \
-    --clump-p 1.000000 \
-    --clump-r2 0.100000 \
-    --extract PRSice.valid \
-    --info-base INFO,0.9 \
-    --interval 5e-05 \
-    --lower 0.0001 \
-    --model add \
-    --out PRSice \
-```
-2.
-#### 4 PRS stastics analysis
-
-### Acknowlegement 
-### Citation
