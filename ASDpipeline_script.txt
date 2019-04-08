@@ -52,21 +52,31 @@ module load gcc
 ## Built PRS by using PRSice
 
 ### r2 < 0.2 bar-levels = 0.00000005,0.0005,0.01,0.05,0.1,1  ASD
-Rscript PRSice.R -b  /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/new_GWAS/iPSYCH-PGC_ASD_Nov2017 -t /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/external_data/2018_05_01/mssngpseudo.all.masked_Feb_28_new --prsice /home/yinyin/PRSice/PRSice --extract PRSice.valid --clump-r2 0.2 --bar-levels 0.00000005,0.0005,0.01,0.05,0.1,1 --fastscore --out ASD_r2_0.2_bar_fast_Apr_3 --all-score
+Rscript PRSice.R -b  <ASD GWAS> -t <MSSNG data> --prsice ./PRSice --extract PRSice.valid --clump-r2 0.2 --bar-levels 0.00000005,0.0005,0.01,0.05,0.1,1 --fastscore --out ASD_r2_0.2_bar_fast_Apr_3 --all-score
 ### r2 < 0.8 bar-levels = 0.00000005,0.0005,0.01,0.05,0.1,1 ASD
-Rscript PRSice.R -b  /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/new_GWAS/iPSYCH-PGC_ASD_Nov2017 -t /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/external_data/2018_05_01/mssngpseudo.all.masked_Feb_28_new --prsice /home/yinyin/PRSice/PRSice --extract PRSice.valid --clump-r2 0.8  --out r2_0.8_bar_fast --bar-levels 0.00000005,0.0005,0.01,0.05,0.1,1 --fastscore --out ASD_r2_0.8_bar_fast_Apr_3 --all-score
+Rscript PRSice.R -b  <ASD GWAS> -t <MSSNG data> --prsice ./PRSice --extract PRSice.valid --clump-r2 0.8  --out r2_0.8_bar_fast --bar-levels 0.00000005,0.0005,0.01,0.05,0.1,1 --fastscore --out ASD_r2_0.8_bar_fast_Apr_3 --all-score
 ### r2 < 0.2 bar-levels = 0.00000005,0.0005,0.01,0.05,0.1,1 ASD+EA
-Rscript PRSice.R -b  /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/new_GWAS/combine_ASD_EA_edited_Apr_1_trait_1.txt -t /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/external_data/2018_05_01/mssngpseudo.all.masked_Feb_28_new --prsice /home/yinyin/PRSice/PRSice --extract PRSice.valid --clump-r2 0.2 --bar-levels 0.00000005,0.0005,0.01,0.05,0.1,1 --fastscore --out ASD_EA_r2_0.2_bar_fast_Apr_3 --all-score
+Rscript PRSice.R -b  <GWAS combined with ASD GWAS and EA GWAS> -t <MSSNG data> --prsice ./PRSice --extract PRSice.valid --clump-r2 0.2 --bar-levels 0.00000005,0.0005,0.01,0.05,0.1,1 --fastscore --out ASD_EA_r2_0.2_bar_fast_Apr_3 --all-score
 ### r2 < 0.8 bar-levels = 0.00000005,0.0005,0.01,0.05,0.1,1 ASD+EA
-Rscript PRSice.R -b  /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/new_GWAS/combine_ASD_EA_edited_Apr_1_trait_1.txt -t /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/external_data/2018_05_01/mssngpseudo.all.masked_Feb_28_new --prsice /home/yinyin/PRSice/PRSice --extract PRSice.valid --clump-r2 0.8 --bar-levels 0.00000005,0.0005,0.01,0.05,0.1,1 --fastscore --out ASD_EA_r2_0.8_bar_fast_Apr_3 --all-score
+Rscript PRSice.R -b  <GWAS combined with ASD GWAS and EA GWAS> -t <MSSNG data> --prsice ./PRSice --extract PRSice.valid --clump-r2 0.8 --bar-levels 0.00000005,0.0005,0.01,0.05,0.1,1 --fastscore --out ASD_EA_r2_0.8_bar_fast_Apr_3 --all-score
 ### r2 < 0.2 bar-levels = 0.00000005,0.0005,0.01,0.05,0.1,1 ASD+SCZ
-Rscript PRSice.R -b  /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/new_GWAS/combine_ASD_SCZ_edited_Apr_1_trait_1.txt -t /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/external_data/2018_05_01/mssngpseudo.all.masked_Feb_28_new --prsice /home/yinyin/PRSice/PRSice --extract PRSice.valid --clump-r2 0.2 --bar-levels 0.00000005,0.0005,0.01,0.05,0.1,1 --fastscore --out ASD_SCZ_r2_0.2_bar_fast_Apr_3 --all-score
+Rscript PRSice.R -b  <GWAS combined with ASD GWAS and SCZ GWAS> -t <MSSNG data> --prsice ./PRSice --extract PRSice.valid --clump-r2 0.2 --bar-levels 0.00000005,0.0005,0.01,0.05,0.1,1 --fastscore --out ASD_SCZ_r2_0.2_bar_fast_Apr_3 --all-score
 ### r2 < 0.8 bar-levels = 0.00000005,0.0005,0.01,0.05,0.1,1 ASD+SCZ
-Rscript PRSice.R -b  /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/new_GWAS/combine_ASD_SCZ_edited_Apr_1_trait_1.txt -t /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/external_data/2018_05_01/mssngpseudo.all.masked_Feb_28_new --prsice /home/yinyin/PRSice/PRSice --extract PRSice.valid --clump-r2 0.8 --bar-levels 0.00000005,0.0005,0.01,0.05,0.1,1 --fastscore --out ASD_SCZ_r2_0.8_bar_fast_Apr_3 --all-score
+Rscript PRSice.R -b  <GWAS combined with ASD GWAS and SCZ GWAS> -t <MSSNG data> --prsice ./PRSice --extract PRSice.valid --clump-r2 0.8 --bar-levels 0.00000005,0.0005,0.01,0.05,0.1,1 --fastscore --out ASD_SCZ_r2_0.8_bar_fast_Apr_3 --all-score
 ### r2 < 0.2 bar-levels = 0.00000005,0.0005,0.01,0.05,0.1,1 ASD+SCZ+EA
-Rscript PRSice.R -b  /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/new_GWAS/combine_ASD_SCZ_EA_edited_Apr_1_trait_1.txt -t /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/external_data/2018_05_01/mssngpseudo.all.masked_Feb_28_new --prsice /home/yinyin/PRSice/PRSice --extract PRSice.valid --clump-r2 0.2 --bar-levels 0.00000005,0.0005,0.01,0.05,0.1,1 --fastscore --out ASD_SCZ_EA_r2_0.2_bar_fast_Apr_3 --all-score
+Rscript PRSice.R -b  <GWAS combined with ASD GWAS, EA GWAS, SCZ GWAS> -t <MSSNG data> --prsice ./PRSice --extract PRSice.valid --clump-r2 0.2 --bar-levels 0.00000005,0.0005,0.01,0.05,0.1,1 --fastscore --out ASD_SCZ_EA_r2_0.2_bar_fast_Apr_3 --all-score
 ### r2 < 0.8 bar-levels = 0.00000005,0.0005,0.01,0.05,0.1,1 ASD+SCZ+EA
-Rscript PRSice.R -b  /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/new_GWAS/combine_ASD_SCZ_EA_edited_Apr_1_trait_1.txt -t /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/external_data/2018_05_01/mssngpseudo.all.masked_Feb_28_new --prsice /home/yinyin/PRSice/PRSice --extract PRSice.valid --clump-r2 0.8 --bar-levels 0.00000005,0.0005,0.01,0.05,0.1,1 --fastscore --out ASD_SCZ_EA_r2_0.8_bar_fast_Apr_3 --all-score
+Rscript PRSice.R -b  <GWAS combined with ASD GWAS, EA GWAS, SCZ GWAS> -t <MSSNG data> --prsice ./PRSice --extract PRSice.valid --clump-r2 0.8 --bar-levels 0.00000005,0.0005,0.01,0.05,0.1,1 --fastscore --out ASD_SCZ_EA_r2_0.8_bar_fast_Apr_3 --all-score
+
+## Preparation for LDpred
+PATH=${PATH}:/home/yinyin/miniconda3/bin 
+module load python 
+source activate python2
+
+## Built PRS by using LDpred
+./LDpred.py coord --gf <reference panel> --ssf <ASD GWAS>  --out <output file path> --N 10610 --rs SNP --pos BP --pval P --beta --ncol ngt --vbim /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/external_data/2018_05_01/mssngpseudo.all.masked_Feb_28_new.bim
+./LDpred.py gibbs --cf <output file from last step> --ldr 3142 --out <output file path>8 --ldf LD --ldr 3142 --N 10610
+./LDpred.py score --gf <MSSSNG data> --rf <output file prefix from last step. --out LDpred  --rf-format LDPRED --pf-format FAM &>  /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/scratch3/ldpred_output.txt
 
 ## PCA
 $(PLINK) \
@@ -80,16 +90,6 @@ $(PLINK) \
 --out OUTPUT_FILE \
 --pca header
 
-## Preparation for LDpred
-PATH=${PATH}:/home/yinyin/miniconda3/bin 
-module load python 
-source activate python2
-
-## Built PRS by using LDpred
-./LDpred.py coord --gf /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/ref --ssf /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/scratch2/asd_gwas_at_intersect_sites.txt  --out /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/scratch/Ldpred_Apr_4.out --N 10610 --rs SNP --pos BP --pval P --beta --ncol ngt --vbim /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/external_data/2018_05_01/mssngpseudo.all.masked_Feb_28_new.bim
-./LDpred.py gibbs --cf /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/scratch/Ldpred_Mar_28.out --ldr 3142 --out /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/scratch/ldpred_gibbs_Mar_28 --ldf LD_Mar_28 --ldr 3142 --N 10610
-./LDpred.py score --gf /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/external_data/2018_05_01/mssngpseudo.all.masked_Feb_28_new --rf /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/scratch3/Ldpred_Mar_28.out_gibbs --out LDpred_Apr_3  --rf-format LDPRED --pf-format FAM &>  /hpf/largeprojects/tcagstor/tcagstor_tmp/yinyin/scratch3/ldpred_output.txt
-
 ## Statistical Analysis
 R
 library(pROC)
@@ -102,7 +102,7 @@ source("~/ASDpipeline/pseudor2.R")
 load("~/ASDpipeline/2018_04_05/pheno.RData")
 
 ## load pca result
-pca_result <- read.table("C:/Users/Owner/Documents/ASDpipeline/PCA_output_Apr_4.eigenvec", header = TRUE)
+pca_result <- read.table(<PCA output> , header = TRUE)
 pc1 <- pca_result$PC1
 pc2 <- pca_result$PC2  
 
@@ -141,9 +141,9 @@ legend("topright", platform_options, col = c("red", "blue", "orange"), lwd = 2)
 
 ## load PRS result
 get_prsice_prs <- function(r2_threshold, pvalue_threshold, GWAS) {
-    file_name <- paste0("C:/Users/Owner/Documents/ASDpipeline/", GWAS, "_r2_", r2_threshold, "_bar_fast_Apr_3.all.score")
+    file_name <- paste0(<file path prefix>, GWAS, "_r2_", r2_threshold, "_bar_fast_Apr_3.all.score")
     if (file.exists(file_name)){
-    prise_result <- read.table(paste0("C:/Users/Owner/Documents/ASDpipeline/", GWAS, "_r2_", r2_threshold, "_bar_fast_Apr_3.all.score"), header=TRUE)
+    prise_result <- read.table(paste0(<file path prefix>, GWAS, "_r2_", r2_threshold, "_bar_fast_Apr_3.all.score"), header=TRUE)
     prs <- prise_result[, paste0("X", pvalue_threshold)]
     names(prs) <- prise_result[, "IID"]
     return(prs)
@@ -153,7 +153,7 @@ get_prsice_prs <- function(r2_threshold, pvalue_threshold, GWAS) {
 }
 
 get_ldpred_prs <- function(rho_parameter) {
-  file_name <- paste0("C:/Users/Owner/Documents/ASDpipeline/LDpred_Apr_5_LDpred_p", rho_parameter, ".txt")
+  file_name <- paste0(<file path prefix>, rho_parameter, ".txt")
   if (file.exists(file_name)){
     ldpred_result <- read.table(file_name, header=TRUE, sep=",")
     prs <- ldpred_result[, "PRS"]
