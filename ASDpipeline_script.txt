@@ -238,8 +238,8 @@ for (GWAS in list_GWAS){
        PRSice_table, 
        c(GWAS, level, r2, 
          format(stat[1], format="e", digits = 1), 
-         round(stat[2], 2), 
          format(stat[3],format="e", digits=1),
+         round(stat[2], 2), 
          round(stat[4],2),
          round(stat[5], 2)
        )
@@ -247,8 +247,8 @@ for (GWAS in list_GWAS){
       new_row <- data.frame(
         GWAS, level, r2, 
         stat[1], 
-        stat[2], 
-        stat[3],
+        stat[3], 
+        stat[2],
         stat[4],
         stat[5],stringsAsFactors = FALSE
       )
@@ -281,8 +281,8 @@ list_rho <- c("1.0000e+00", "1.0000e-01", "1.0000e-02", "1.0000e-03", "3.0000e-0
           LDpred_table, 
           c("ASD", rho, 
             format(stat[1], format="e", digits = 1), 
-            round(stat[2], 2), 
             format(stat[3],format="e", digits=1),
+            round(stat[2], 2), 
             round(stat[4],2),
             round(stat[5], 2)
           )
@@ -290,8 +290,8 @@ list_rho <- c("1.0000e+00", "1.0000e-01", "1.0000e-02", "1.0000e-03", "3.0000e-0
         new_row <- data.frame(
           "ASD", rho, 
           stat[1], 
-          stat[2], 
-          stat[3],
+          stat[3], 
+          stat[2],
           stat[4],
           stat[5],stringsAsFactors = FALSE
         )
